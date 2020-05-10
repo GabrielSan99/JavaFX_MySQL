@@ -47,7 +47,8 @@ public class DepartmentListController implements Initializable{
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+		Department obj = new Department(); // criação de um novo departamento assim que clicar no botão new na janela departamento
+		createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	public void setDepartmentService(DepartmentService service) {
@@ -76,10 +77,15 @@ public class DepartmentListController implements Initializable{
 		obsList = FXCollections.observableArrayList(list); // ambos comando abaixo servem para coletar os itens e depois jogar na tableview
 		tableViewDepartment.setItems(obsList);
 	}
-	private void createDialogForm(String absolutName, Stage parentStage) { // chamada da tela para inserir um novo departamento, semelhante ao que existe no mainViewController
+	private void createDialogForm(Department obj, String absolutName, Stage parentStage) { // chamada da tela para inserir um novo departamento, semelhante ao que existe no mainViewController
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
 			Pane pane = loader.load();
+			
+			DepartmentFormController controller = loader.getController();
+			controller.setDepartment(obj);
+			controller.setDepartmentSerrvice(new DepartmentService());
+			controller.updateFormData();
 			
 			Stage dialogStage = new Stage ();
 			dialogStage.setTitle("Enter Department data");
