@@ -3,9 +3,11 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.DbIntegrityException;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
@@ -19,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -44,6 +47,9 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 	@FXML
 	private TableColumn<Department, String> tableColumnName;
+
+	@FXML
+	private TableColumn<Department, Department> tableColumnREMOVE;
 
 	@FXML
 	private Button btNew;
@@ -89,6 +95,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 															// jogar na tableview
 		tableViewDepartment.setItems(obsList);
 		initEditButtons(); // isso aqui acrescenta os botões edit em cada linha da tabela
+		initRemoveButtons(); // idem acima,  so que remove
 	}
 
 	private void createDialogForm(Department obj, String absolutName, Stage parentStage) { // chamada da tela para
@@ -126,7 +133,11 @@ public class DepartmentListController implements Initializable, DataChangeListen
 		updateTableView();
 	}
 
-	private void initEditButtons() {  // esse código é bem especefico, mas de maneira geral ele serve para pegar botões que estão a frente de cada departamento com a função de tornar eles editaveis. É bem semelhante com o código de inserir um novo departamento, com a diferença de que aqui é instanciadp o objeto ja existente diferente daquele que é instanciado um objeto vazio
+	private void initEditButtons() { // esse código é bem especefico, mas de maneira geral ele serve para pegar
+										// botões que estão a frente de cada departamento com a função de tornar eles
+										// editaveis. É bem semelhante com o código de inserir um novo departamento, com
+										// a diferença de que aqui é instanciadp o objeto ja existente diferente daquele
+										// que é instanciado um objeto vazio
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEDIT.setCellFactory(param -> new TableCell<Department, Department>() {
 			private final Button button = new Button("edit");
@@ -143,5 +154,41 @@ public class DepartmentListController implements Initializable, DataChangeListen
 						event -> createDialogForm(obj, "/gui/DepartmentForm.fxml", Utils.currentStage(event)));
 			}
 		});
+	}
+
+	private void initRemoveButtons() { // mesmo principio do edit
+		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnREMOVE.setCellFactory(param -> new TableCell<Department, Department>() {
+			private final Button button = new Button("remove");
+
+			@Override
+			protected void updateItem(Department obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> removeEntity(obj));
+			}
+		});
+	}
+
+	private void  removeEntity(Department obj) { // operação para  remover uma entidade
+		Optional <ButtonType> result = Alerts.showConfirmation("Confirmation", "Are you sure to remove?"); // responsavel por criar a janela perguntando se tenho certeza, janela de alerta de confirmação
+		
+		if (result.get() == ButtonType.OK) {
+			if (service == null) {
+				throw new IllegalStateException("Service was null");
+			}
+			try {
+			service.remove(obj);
+			updateTableView();
+			}
+	
+			catch(DbIntegrityException e) {
+				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
+			}
+		}	
 	}
 }
