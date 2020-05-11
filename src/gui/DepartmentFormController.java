@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListener;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.exceptions.ValidationException;
 import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable {
@@ -70,6 +73,9 @@ public class DepartmentFormController implements Initializable {
 			Utils.currentStage(event).close(); // quando o botão for apertado ele fecha a janela e salva
 			
 		}
+		catch (ValidationException e) {
+			setErrorMessages(e.getErrors()); // toda a programação dos erros la embaixo estão em função de clicar no botão save
+		}
 		catch (DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -85,9 +91,18 @@ public class DepartmentFormController implements Initializable {
 	private Department getFormData() { // responsavel por pegar os dados digitados no formulario e instaciar no departamento
 		Department obj = new Department();
 		
+		ValidationException exception = new ValidationException("Validation Error"); // instanciando a excessaõ
+		
 		obj.setId(Utils.tryParseToInt (txtId.getText())); // o método de conversão presente no utils
+		
+		if (txtName.getText() == null || txtName.getText().trim().equals ("")) {
+			exception.addError("name", "Field can't be empty"); // isso faz armazenar no map do validation exception e imprimir a mensagem de erro
+		}
 		obj.setName(txtName.getText());
 		
+		if (exception.getErrors().size()> 0) { // ele vai ver o map e vai imprimir a excessão
+			throw exception;
+		}
 		return obj;
 	}
 
@@ -113,6 +128,14 @@ public class DepartmentFormController implements Initializable {
 		else {
 		txtId.setText(String.valueOf(entity.getId())); // aqui é onde ocorrem as mudanças quando  utilizado  os textbox
 		txtName.setText(entity.getName());
+		}
+	}
+	
+	private void setErrorMessages(Map<String, String> errors) {
+		Set<String> fields = errors.keySet();
+		
+		if (fields.contains("name")) { // se o erro "name" estiver presente ele vai imprimir a msg de erro na label
+			labelErrorName.setText(errors.get("name")); // vai pegar a msg atrelada a "name" no map e escrever na label
 		}
 	}
 }
