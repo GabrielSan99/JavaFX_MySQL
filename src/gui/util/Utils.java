@@ -29,6 +29,15 @@ public class Utils {
 		}
 	}
 
+	public static Double tryParseToDouble(String str) { // método utilizado para converter parse para int, vai ser usado
+		// em outras partes do programa
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
 	public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format) { // método utilizado
 																									// apenas para a
 																									// formatação de

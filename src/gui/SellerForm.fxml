@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="209.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SellerFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="217.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SellerFormController">
    <children>
       <GridPane prefHeight="174.0" prefWidth="510.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
@@ -38,7 +38,10 @@
             <Label GridPane.columnIndex="1" />
             <TextField fx:id="txtId" editable="false" prefHeight="25.0" prefWidth="233.0" GridPane.columnIndex="1" />
             <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="labelErrorName" prefHeight="17.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dpBirthDate" prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txtBaseSalary" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="labelErrorName" prefHeight="17.0" prefWidth="190.0" textFill="#ff4000" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin></Label>
@@ -58,13 +61,7 @@
             <Label prefHeight="17.0" prefWidth="71.0" text="Birth Date" GridPane.rowIndex="3" />
             <Label text="Base Salary" GridPane.rowIndex="4" />
             <Label text="Department" GridPane.rowIndex="5" />
-            <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <DatePicker fx:id="dpBirthDate" prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="txtBaseSalary" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label fx:id="labelErrorEmail" prefHeight="17.0" prefWidth="190.0" textFill="#ff1e00" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
