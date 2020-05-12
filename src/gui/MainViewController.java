@@ -17,6 +17,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.services.DepartmentService;
+import model.services.SellerService;
 
 public class MainViewController implements Initializable {
 	
@@ -31,7 +32,10 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemSellerAction() {
-		System.out.println("onMenuItemSellerAction");
+		loadView("/gui/SellerList.fxml", (SellerListController controller) -> { // função lâmbida, ela vai usa usar o loadView para carregar a tela Department e depois vamos instanciar métodos dentro da propria chamada de função, conhecida como função lambida
+			 controller.setSellerService(new SellerService());
+			 controller.updateTableView();
+		});
 	}
 	
 	@FXML
