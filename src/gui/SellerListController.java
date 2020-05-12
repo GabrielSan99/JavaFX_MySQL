@@ -126,7 +126,7 @@ public class SellerListController implements Initializable, DataChangeListener {
 			SellerFormController controller = loader.getController();
 			controller.setSeller(obj);
 			controller.setServices(new SellerService(), new DepartmentService());
-			controller.subscribeDataChageListener(this); // quando for executado ele conta essa tela para executar um
+			controller.subscribeDataChangeListener(this); // quando for executado ele conta essa tela para executar um
 			controller.loadAssociateObjects(); // cria a tela dos departamentos associados aos sellers												// método de fechamento e abertura da tela departmentList
 			controller.updateFormData();
 

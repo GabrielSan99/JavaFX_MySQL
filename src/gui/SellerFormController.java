@@ -45,7 +45,7 @@ public class SellerFormController implements Initializable {
 
 	private DepartmentService departmentService;
 
-	private List<DataChangeListener> dataChangeListener = new ArrayList<>();
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtId;
@@ -94,8 +94,8 @@ public class SellerFormController implements Initializable {
 		this.departmentService = departmentService;
 	}
 
-	public void subscribeDataChageListener(DataChangeListener listener) {
-		dataChangeListener.add(listener);
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
 	}
 
 	@FXML
@@ -121,7 +121,7 @@ public class SellerFormController implements Initializable {
 	}
 
 	private void notifyDataChangeListeners() {
-		for (DataChangeListener listener : dataChangeListener) {
+		for (DataChangeListener listener : dataChangeListeners) {
 			listener.onDataChange();
 		}
 
@@ -177,7 +177,7 @@ public class SellerFormController implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	public void initialize(URL url, ResourceBundle rb) {
 		initializeNodes();
 	}
 
@@ -193,11 +193,12 @@ public class SellerFormController implements Initializable {
 	public void updateFormData() { // aqui que são pego os valores de update para serem impressos
 		if (entity == null) {
 			throw new IllegalStateException("Entity was null");
-		} else {
+		} 
+		else {
 			txtId.setText(String.valueOf(entity.getId())); // aqui é onde ocorrem as mudanças quando utilizado os
 															// textbox
 			txtName.setText(entity.getName());
-			txtName.setText(entity.getEmail());
+			txtEmail.setText(entity.getEmail());
 			Locale.setDefault(Locale.US);
 			txtBaseSalary.setText(String.format("%.2f", entity.getBaseSalary()));
 
